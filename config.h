@@ -21,7 +21,7 @@
 
 /* Default output format string; see doc/format-string for more information
    *** Can be overridden with -f */
-#define DEFAULT_FORMAT "timestamp,source-ip,dest-ip,direction,method,host,request-uri,http-version,status-code,reason-phrase"
+#define DEFAULT_FORMAT "timestamp,source-mac,source-ip,dest-mac,dest-ip,direction,method,host,request-uri,http-version,status-code,reason-phrase"
 
 /* Default format string for rate statistics mode; should never change! */
 #define RATE_FORMAT "host"
