@@ -299,7 +299,7 @@ void parse_http_packet(u_char *args, const struct pcap_pkthdr *header, const u_c
         char saddr[INET6_ADDRSTRLEN], daddr[INET6_ADDRSTRLEN];
         char sport[PORTSTRLEN], dport[PORTSTRLEN];
         char ts[MAX_TIME_LEN], fmt[MAX_TIME_LEN];
-        char smac[(ETHER_ADDR_LEN * 3)], dmac[(ETHER_ADDR_LEN * 3)];
+        char smac[ETHER_ADDR_LEN * 3], dmac[ETHER_ADDR_LEN * 3];
         int is_request = 0, is_response = 0;
         unsigned int eth_type = 0, offset;
 
@@ -314,8 +314,8 @@ void parse_http_packet(u_char *args, const struct pcap_pkthdr *header, const u_c
         eth = (struct eth_header *) pkt;
 
         /* Initializes smac and dmac */
-        memset(smac, '\0', sizeof(smac));
-        memset(dmac, '\0', sizeof(dmac));
+        memset(smac, '\0', ETHER_ADDR_LEN * 3);
+        memset(dmac, '\0', ETHER_ADDR_LEN * 3);
 
         /* Get MAC address from Ethernet Header */
         sprintf(smac, "%02X", eth->ether_shost[0]);
@@ -325,7 +325,7 @@ void parse_http_packet(u_char *args, const struct pcap_pkthdr *header, const u_c
         int i = 1;
         while (i < ETHER_ADDR_LEN) {
                 sprintf(smac, "%s:%02X", smac, eth->ether_shost[i]);
-                sprintf(dmac, "%s:%02X", smac, eth->ether_dhost[i]);
+                sprintf(dmac, "%s:%02X", dmac, eth->ether_dhost[i]);
                 i += 1;
         }
 
