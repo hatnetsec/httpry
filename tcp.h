@@ -19,6 +19,14 @@
 #define ETHER_TYPE_VLAN 0x8100  /* 802.1q VLAN type */
 #endif
 
+#ifndef ETHER_TYPE_QINQ
+#define ETHER_TYPE_QINQ 0x88A8  /* 802.1ad VLAN-QinQ standard */
+#endif
+
+#ifndef ETHER_TYPE_QINQ_OLD
+#define ETHER_TYPE_QINQ_OLD 0x9100  /* Old non-standard VLAN-QinQ */
+#endif
+
 /* These IP and TCP structs/macros are from sniffex.c and
    were released under the following license: */
 
@@ -120,6 +128,16 @@ struct eth_header {
         u_char  ether_dhost[ETHER_ADDR_LEN];    /* destination host address */
         u_char  ether_shost[ETHER_ADDR_LEN];    /* source host address */
         u_short ether_type;                     /* IP? ARP? RARP? etc */
+};
+
+/* Old Non-standard Cisco Ethernet 802.1q VLAN Double-tagging header */
+struct eth_cisco_dt_header {
+        u_char  ether_dhost[ETHER_ADDR_LEN];    /* destination host address */
+        u_char  ether_shost[ETHER_ADDR_LEN];    /* source host address */
+        u_short first_tag;                      /* First 802.11q tag */
+        u_short first_tag_data;                 /* First 802.11q tag info*/
+        u_short second_tag;                     /* Second 802.11q tag */
+        u_short second_tag_data;                /* Second 802.11q tag info*/
 };
 
 /* IP header */

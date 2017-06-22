@@ -309,6 +309,8 @@ void parse_http_packet(u_char *args, const struct pcap_pkthdr *header, const u_c
         const struct tcp_header *tcp;
         const char *data;
         int size_ip, size_tcp, size_data, family;
+        
+        const struct eth_cisco_dt_header *eth_cdt;
 
         /* Check the ethernet type and insert a VLAN offset if necessary */
         eth = (struct eth_header *) pkt;
@@ -335,10 +337,21 @@ void parse_http_packet(u_char *args, const struct pcap_pkthdr *header, const u_c
         eth_type = ntohs(eth->ether_type);
         if (eth_type == ETHER_TYPE_VLAN) {
                 offset = link_offset + 4;
+        } else if (eth_type == ETHER_TYPE_QINQ || eth_type == ETHER_TYPE_QINQ_OLD) {
+                offset = link_offset + 8;
         } else {
                 offset = link_offset;
         }
-
+        
+        /* Check for old non-standard Cisco-style QinQ */
+        eth_cdt = (struct eth_cisco_dt_header) pkt;
+        first_cdt = ntohs(eth_cdt->first_tag);
+        second_cdt = ntohs(eth_cdt->second_tag);
+        
+        if (first_cdt == ETHER_TYPE_VLAN && second_cdt == ETHER_TYPE_VLAN) {
+            offset = link_offset + 8;
+        }
+        
         offset += eth_skip_bits;
 
         /* Position pointers within packet stream and do sanity checks */
