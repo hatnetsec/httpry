@@ -344,7 +344,7 @@ void parse_http_packet(u_char *args, const struct pcap_pkthdr *header, const u_c
         }
         
         /* Check for old non-standard Cisco-style QinQ */
-        eth_cdt = (struct eth_cisco_dt_header) pkt;
+        eth_cdt = (struct eth_cisco_dt_header *) pkt;
         first_cdt = ntohs(eth_cdt->first_tag);
         second_cdt = ntohs(eth_cdt->second_tag);
         
