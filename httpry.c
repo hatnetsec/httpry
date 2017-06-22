@@ -301,7 +301,7 @@ void parse_http_packet(u_char *args, const struct pcap_pkthdr *header, const u_c
         char ts[MAX_TIME_LEN], fmt[MAX_TIME_LEN];
         char smac[ETHER_ADDR_LEN * 3], dmac[ETHER_ADDR_LEN * 3];
         int is_request = 0, is_response = 0;
-        unsigned int eth_type = 0, offset;
+        unsigned int eth_type = 0, offset, first_cdt, second_cdt;
 
         const struct eth_header *eth;
         const struct ip_header *ip;
