@@ -12,6 +12,7 @@ DEBUGFLAGS	= -Wall -g -DDEBUG -I/usr/include/pcap -I/usr/local/include/pcap
 LIBS		= -lpcap -lm -pthread
 PROG		= httpry
 FILES		= httpry.c format.c methods.c utility.c rate.c
+PREFIX      ?= /usr/local
 
 .PHONY: all debug profile install uninstall clean
 
@@ -44,17 +45,18 @@ profile: $(FILES)
 
 install: $(PROG)
 	@echo "--------------------------------------------------"
-	@echo "Installing $(PROG) into /usr/sbin/"
+	@echo "Installing $(PROG) into $(PREFIX)/bin/"
 	@echo ""
 	@echo "You can move the Perl scripts and other tools to"
 	@echo "a location of your choosing manually"
 	@echo "--------------------------------------------------"
 	@echo ""
-	cp -f $(PROG) /usr/sbin/
+    @mkdir -p $(PREFIX)/bin
+	cp -f $(PROG) $(PREFIX)/bin/
 	cp -f $(PROG).1 /usr/man/man1/ || cp -f $(PROG).1 /usr/local/man/man1/
 
 uninstall:
-	rm -f /usr/sbin/$(PROG)
+	rm -f $(PREFIX)/bin/$(PROG)
 	rm -f /usr/man/man1/$(PROG).1 || rm -f /usr/local/man/man1/$(PROG).1
 
 clean:
