@@ -17,7 +17,7 @@
 
 /* Default packet capture filter; must be a standard libpcap style filter
    *** Can be overridden */
-#define DEFAULT_CAPFILTER "(tcp port 80) or (vlan and ((vlan and tcp port 80) or (tcp port 80)))"
+#define DEFAULT_CAPFILTER "((tcp port 80) or (vlan and ((vlan and tcp port 80) or (tcp port 80)))) or ((tcp port 8080) or (vlan and ((vlan and tcp port 8080) or (tcp port 8080))))"
 
 /* Default output format string; see doc/format-string for more information
    *** Can be overridden with -f */
