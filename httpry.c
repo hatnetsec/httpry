@@ -667,6 +667,7 @@ void display_banner() {
         PRINT("%s version %s -- "
               "HTTP logging and information retrieval tool", PROG_NAME, PROG_VER);
         PRINT("Copyright (c) 2005-2014 Jason Bittel <jason.bittel@gmail.com>");
+        PRINT("Modification by Evan Kurniawan <mforsetti@gmail.com>. All rights reserved.")
 
         return;
 }
