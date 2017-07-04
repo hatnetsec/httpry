@@ -80,6 +80,8 @@ status() {
   local ret=0
   local pstat=0
   
+  sleep 3
+  
   if [ -f "$PIDFILE" ]; then
     pstat=$(ps -eF | grep $(cat $PIDFILE) | grep httpry | grep -v grep | /usr/bin/wc -l)
   fi
