@@ -61,7 +61,7 @@ stop() {
   local ret=0
   
   if [ $stat -eq "0" ]; then
-    kill $(cat $PIDFILE)
+    kill $(cat $PIDFILE) 2>&1 1>/dev/null
     if [ "$?" -eq "0" ]; then
       echo "OK"
     else
