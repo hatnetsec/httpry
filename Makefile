@@ -53,11 +53,9 @@ install: $(PROG)
 	@echo ""
 	@mkdir -p $(PREFIX)/bin
 	cp -f $(PROG) $(PREFIX)/bin/
-	cp -f $(PROG).1 /usr/man/man1/ || cp -f $(PROG).1 /usr/local/man/man1/
 
 uninstall:
 	rm -f $(PREFIX)/bin/$(PROG)
-	rm -f /usr/man/man1/$(PROG).1 || rm -f /usr/local/man/man1/$(PROG).1
 
 clean:
 	rm -f $(PROG)
