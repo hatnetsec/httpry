@@ -51,7 +51,7 @@ install: $(PROG)
 	@echo "a location of your choosing manually"
 	@echo "--------------------------------------------------"
 	@echo ""
-    @mkdir -p $(PREFIX)/bin
+	@mkdir -p $(PREFIX)/bin
 	cp -f $(PROG) $(PREFIX)/bin/
 	cp -f $(PROG).1 /usr/man/man1/ || cp -f $(PROG).1 /usr/local/man/man1/
 
