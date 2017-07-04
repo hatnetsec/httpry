@@ -9,13 +9,20 @@ PREFIX=/opt/httpry
 CONFIG=$PREFIX/etc/httpry.conf
 HTTPRY=$PREFIX/bin/httpry
 
-DAEMON=0
+DAEMON=1
 OUTPUT=$PREFIX/log/httpry.log
 PIDFILE=$PREFIX/run/httpry.pid
+INTERFACE="eth3"
 
 OPTIONS=""
 
-[ -f "$CONFIG"] && . "$CONFIG"
+[ -f "$CONFIG" ] && . "$CONFIG"
+
+if [ -n "$INTERFACE" ]; then
+  OPTIONS="-i $INTERFACE"
+else
+  OPTIONS="-i lo"
+fi
 
 if [ "$DAEMON" -gt "0" ]; then
   OPTIONS="$OPTIONS -d"
@@ -55,6 +62,11 @@ stop() {
   
   if [ $stat -eq "0" ]; then
     kill $(cat $PIDFILE)
+    if [ "$?" -eq "0" ]; then
+      echo "OK"
+    else
+      echo "ERROR"
+    fi
   else
     echo "ERROR"
     echo "httpry is not running or in a bad state."
@@ -69,7 +81,7 @@ status() {
   local pstat=0
   
   if [ -f "$PIDFILE" ]; then
-    pstat=$(ps -eF | grep $(cat $PIDFILE) | grep httpry)
+    pstat=$(ps -eF | grep $(cat $PIDFILE) | grep httpry | grep -v grep | /usr/bin/wc -l)
   fi
   
   if [ "$pstat" -eq "0" ]; then
@@ -101,7 +113,7 @@ case "$1" in
     start
     ;;
   status)
-    status
+    status 0
     ;;
   *)
     echo $"Usage: $0 {start|stop|status|restart}"
