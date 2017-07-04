@@ -1,0 +1,107 @@
+#!/bin/bash
+#
+# httpry - HTTP logging and information retrieval tool
+#
+# chkconfig: 2345 99 01
+# description: httpry is a HTTP logging and information retrieval tool.
+
+PREFIX=/opt/httpry
+CONFIG=$PREFIX/etc/httpry.conf
+HTTPRY=$PREFIX/bin/httpry
+
+DAEMON=0
+OUTPUT=$PREFIX/log/httpry.log
+PIDFILE=$PREFIX/run/httpry.pid
+
+OPTIONS=""
+
+[ -f "$CONFIG"] && . "$CONFIG"
+
+if [ "$DAEMON" -gt "0" ]; then
+  OPTIONS="$OPTIONS -d"
+fi
+
+if [ -n "$OUTPUT" ]; then
+  OPTIONS="$OPTIONS -o $OUTPUT"
+fi
+
+if [ -n "$PIDFILE" ]; then
+  OPTIONS="$OPTIONS -P $PIDFILE"
+fi
+
+start() {
+  echo -n "Starting httpry..."
+  status 1
+  local stat=$?
+  local ret=0
+  
+  if [ "$stat" -ne "0" ]; then
+    $HTTPRY $OPTIONS
+    echo "OK"
+  else
+    echo "ERROR"
+    echo "httpry is running or in a bad state."
+    ret=1
+  fi
+  
+  return $ret
+}
+
+stop() {
+  echo -n "Stopping httpry..."
+  status 1
+  local stat=$?
+  local ret=0
+  
+  if [ $stat -eq "0" ]; then
+    kill $(cat $PIDFILE)
+  else
+    echo "ERROR"
+    echo "httpry is not running or in a bad state."
+    ret=1
+  fi
+  
+  return $ret
+}
+
+status() {
+  local ret=0
+  local pstat=$(ps -eF | grep $(cat $PIDFILE) | grep httpry)
+  
+  if [ "$pstat" -eq "0" ]; then
+    ret=1
+  else
+    ret=0
+  fi
+  
+  if [ "$1" -eq "1" ]; then
+    return $ret
+  else
+    if [ "$ret" -eq "0" ]; then
+      echo "httpry is running."
+    else
+      echo "httpry is not running."
+    fi
+  fi
+}
+
+case "$1" in
+  start)
+    start
+    ;;
+  stop)
+    stop
+    ;;
+  restart)
+    stop
+    start
+    ;;
+  status)
+    status
+    ;;
+  *)
+    echo $"Usage: $0 {start|stop|status|restart}"
+    exit 1
+esac
+
+exit $?
