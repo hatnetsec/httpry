@@ -1,0 +1,23 @@
+HTTPry provides several fields for format-string that consists of:
+
+1. Arbitrary HTTP Header (Request or Response, depends on direction of 
+   the packet(s))
+Any HTTP Header, request header or response header, can be parsed and put
+as field(s) on output by specifying it on the format string.
+
+2. HTTPry-defined fields
+HTTPry itself defines several fields to be described in the output fields,
+which consists of:
+a. timestamp, timestamp in (%Y-%m-%d %H:%M:%S.%%03u) strftime format.
+b. source-ip, packet source IP.
+c. dest-ip, packet destination IP.
+d. direction, direction of the packet.
+e. method, (Request only) HTTP method of the request.
+f. request-uri, (Request only) Full Request URI of the request.
+g. http-version, (Request only) HTTP Version of the request.
+h. status-code, (Response only) HTTP Response status code.
+i. reason-phrase, (Response only) HTTP Response status reason.
+j. source-port, packet source port.
+k. dest-port, packet destination port.
+l. source-mac, packet source MAC address.
+m. dest-mac, packet destination MAC address.
