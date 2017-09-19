@@ -66,6 +66,7 @@ static int rate_stats = 0;
 static int rate_interval = DEFAULT_RATE_INTERVAL;
 static int rate_threshold = DEFAULT_RATE_THRESHOLD;
 static int force_flush = 0;
+static int request_only = 0;
 int quiet_mode = 0;               /* Defined as extern in error.h */
 int use_syslog = 0;               /* Defined as extern in error.h */
 
@@ -402,7 +403,7 @@ void parse_http_packet(u_char *args, const struct pcap_pkthdr *header, const u_c
 
         if (is_request) {
                 if (parse_client_request(header_line)) return;
-        } else if (is_response) {
+        } else if (is_response && !request_only) {
                 if (parse_server_response(header_line)) return;
         }
 
@@ -684,6 +685,7 @@ void display_usage() {
                "   -d           run as daemon\n"
                "   -f format    specify output format string\n"
                "   -F           force output flush\n"
+               "   -g           only capture HTTP requests\n"
                "   -h           print this help information\n"
                "   -i device    listen on this interface\n"
                "   -l threshold specify a rps threshold for rate statistics\n"
@@ -715,12 +717,13 @@ int main(int argc, char **argv) {
         signal(SIGINT, &handle_signal);
 
         /* Process command line arguments */
-        while ((opt = getopt(argc, argv, "b:df:Fhpqi:l:m:n:o:P:r:st:u:S:")) != -1) {
+        while ((opt = getopt(argc, argv, "b:df:Fghpqi:l:m:n:o:P:r:st:u:S:")) != -1) {
                 switch (opt) {
                         case 'b': use_dumpfile = optarg; break;
                         case 'd': daemon_mode = 1; use_syslog = 1; break;
                         case 'f': format_str = optarg; break;
                         case 'F': force_flush = 1; break;
+                        case 'g': request_only = 1; break;
                         case 'h': display_usage(); break;
                         case 'i': interface = optarg; break;
                         case 'l': rate_threshold = atoi(optarg); break;
