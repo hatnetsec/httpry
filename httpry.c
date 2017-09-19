@@ -403,9 +403,9 @@ void parse_http_packet(u_char *args, const struct pcap_pkthdr *header, const u_c
 
         if (is_request) {
                 if (parse_client_request(header_line)) return;
-        } else if (is_response && !request_only) {
-                if (parse_server_response(header_line)) return;
-        }
+        } else if (is_response) {
+                if (request_only || parse_server_response(header_line)) return;
+        } else return; /* malformed packet. bail. */
 
         /* Iterate through request/entity header fields */
         while ((header_line = parse_header_line(NULL)) != NULL) {
